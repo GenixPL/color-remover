@@ -1,1 +1,49 @@
-Hello, World!
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>Color remover</title>
+      <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css">
+      <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
+    </head>
+
+    <div class="color-controls">
+        <div>
+            <p><strong>Color From (RGBA):</strong></p>
+            <input type="number" id="from-r" placeholder="R" min="0" max="255" value="0">
+            <input type="number" id="from-g" placeholder="G" min="0" max="255" value="0">
+            <input type="number" id="from-b" placeholder="B" min="0" max="255" value="0">
+            <input type="number" id="from-a" placeholder="A" min="0" max="255" value="0">
+        </div>
+
+        <div style="margin-top: 10px;">
+            <p><strong>Color To (RGBA):</strong></p>
+            <input type="number" id="to-r" placeholder="R" min="0" max="255" value="0">
+            <input type="number" id="to-g" placeholder="G" min="0" max="255" value="0">
+            <input type="number" id="to-b" placeholder="B" min="0" max="255" value="0">
+            <input type="number" id="to-a" placeholder="A" min="0" max="255" value="0">
+        </div>
+
+        <div style="margin-top: 10px;">
+            <p><strong>Color Threshold:</strong></p>
+            <input type="number" id="threshold" placeholder="threshold" min="0" max="255" value="0">
+        </div>
+    </div>
+
+    <body>
+      <h3>Select file️:</h3>
+      <input type="file" id="file-selector" accept="image/*"/>
+      <br>
+      <img id="output-image" style="max-width: 500px; display: none;" />
+
+      <div id="btn-div" style="display: none">
+          <button id="change-btn" style="margin-top: 10px;">Change</button>
+          <button id="download-btn" style="margin-top: 10px;">Download</button>
+      </div>
+
+
+
+      <script type="py" src="./main.py" config="./pyscript.json"></script>
+    </body>
+</html>
