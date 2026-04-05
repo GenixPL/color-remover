@@ -11,16 +11,15 @@
   </head>
 
     <body>
-      <h1>Polyglot 🦜 💬 🇬🇧 ➡️ 🏴‍☠️</h1>
-      <p>Translate English into Pirate speak...</p>
-      <input type="text" id="english" placeholder="Type English here..." />
-      <button id="translate-button">Translate</button>
-      <div id="output"></div>
-
-      <br>
+      <h3>Select file️</h3>
+      
       <input type="file" id="file-selector" accept="image/*"/>
       <br>
       <img id="output-image" style="max-width: 500px; display: none;" />
+
+      <button id="download-btn" style="display: none; margin-top: 10px;">
+        Download
+      </button>
 
       <script type="py" src="./main.py" config="./pyscript.json"></script>
     </body>

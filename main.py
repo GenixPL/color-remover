@@ -5,16 +5,14 @@ from PIL import Image, ImageOps
 from pyscript import window, web, when, display, document
 from js import console, fetch
 
-@when("click", "#translate-button")
-def translate_english(event):
-    input_text = web.page["english"]
-    english = input_text.value
-    output_div = web.page["output"]
-    output_div.innerText = english
+# Global variable to hold the processed image data
+processed_image_data = None
 
 
 @when("change", "#file-selector")
 async def on_file_selected(event):
+    global processed_image_data
+
     # Grab the file list from the target element
     file_list = event.target.files
 
@@ -22,6 +20,7 @@ async def on_file_selected(event):
         return
 
     selected_file = file_list.item(0)
+    # processed_image_name = selected_file.filename
 
     # ------------------------------------------------
     # 2. PIL Manipulation
@@ -56,6 +55,7 @@ async def on_file_selected(event):
 
     # Encode to base64 to set as src
     base64_str = base64.b64encode(new_img_bytes).decode('utf-8')
+    processed_image_data = f"data:image/png;base64,{base64_str}"
 
     # ------------------------------------------------
     # 4. Display the result
@@ -63,18 +63,18 @@ async def on_file_selected(event):
     img_element = document.querySelector("#output-image")
     img_element.src = f"data:image/png;base64,{base64_str}"
     img_element.style.display = "block"
-    return 
 
-    # We use the browser's FileReader API via the window object
-    reader = window.FileReader.new()
+    # Show the download button
+    document.querySelector("#download-btn").style.display = "inline-block"
 
-    # Define what happens when the file is finished loading
-    def on_load(e):
-        img_element = document.querySelector("#output-image")
-        # Set the result (base64 string) as the image source
-        img_element.src = reader.result
-        img_element.style.display = "block"
 
-    # Assign the callback and read the file
-    reader.onload = on_load
-    reader.readAsDataURL(selected_file)
+@when("click", "#download-btn")
+def download_image(event):
+    if processed_image_data:
+        # Create a temporary anchor (<a>) element
+        link = document.createElement("a")
+        link.href = processed_image_data
+        link.download =  "editted.png"  # The default filename
+
+        # Trigger the download
+        link.click()
