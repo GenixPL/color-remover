@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import io
+import time
 
 from PIL import Image, ImageOps
 from pyscript import window, web, when, display, document
@@ -113,12 +114,14 @@ def download_image(event):
 
 @when("click", "#change-btn")
 async def modify_image(event):
-    # TODO(genix): add spinner
-
     global processed_image_data, color_to, color_from, threshold
 
     if processed_image_data is None:
         return
+
+    progress_element = document.querySelector("#progress")
+    progress_element.style.display = "block"
+    time.sleep(0.25)
 
     img_element = document.querySelector("#output-image")
 
@@ -165,3 +168,6 @@ async def modify_image(event):
     # 5. Update the UI so the user sees the change
 
     img_element.src = processed_image_data
+
+    progress_element.style.display = "none"
+    time.sleep(0.25)
