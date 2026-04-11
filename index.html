@@ -8,6 +8,11 @@
       <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
     </head>
 
+    <h5>
+        A == 0 -> fully transparent <br>
+        A == 255 -> fully opaque
+    </h5>
+
     <div class="color-controls">
         <div>
             <p><strong>Color From (RGBA):</strong></p>
@@ -15,6 +20,7 @@
             <input type="number" id="from-g" placeholder="G" min="0" max="255" value="0">
             <input type="number" id="from-b" placeholder="B" min="0" max="255" value="0">
             <input type="number" id="from-a" placeholder="A" min="0" max="255" value="0">
+            <input type="color" id="from-rgb" value="#000000">
         </div>
 
         <div style="margin-top: 10px;">
@@ -23,11 +29,12 @@
             <input type="number" id="to-g" placeholder="G" min="0" max="255" value="0">
             <input type="number" id="to-b" placeholder="B" min="0" max="255" value="0">
             <input type="number" id="to-a" placeholder="A" min="0" max="255" value="0">
+            <input type="color" id="to-rgb" value="#000000">
         </div>
 
         <div style="margin-top: 10px;">
             <p><strong>Color Threshold:</strong></p>
-            <input type="number" id="threshold" placeholder="threshold" min="0" max="255" value="0">
+            <input type="number" id="threshold" placeholder="threshold" min="0" max="255" value="10">
         </div>
     </div>
 
