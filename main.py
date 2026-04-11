@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import io
+import time
 
 from PIL import Image, ImageOps
 from pyscript import window, web, when, display, document
@@ -12,11 +13,10 @@ processed_image_data = None
 
 color_to = (0, 0, 0, 0)
 color_from = (0, 0, 0, 0)
-threshold = 0
+threshold = 10
 
 @when("change", "#file-selector")
 async def on_file_selected(event):
-    print("SELECTED")
     global processed_image_data
 
     # Grab the file list from the target element
@@ -50,7 +50,7 @@ async def on_file_selected(event):
     # Show the download button
     document.querySelector("#btn-div").style.display = "inline-block"
 
-@when("input", ".color-controls input")
+@when("input", ".color-controls input[type='number']")
 def on_color_input(event):
     global color_from, color_to, threshold
 
@@ -66,6 +66,41 @@ def on_color_input(event):
     color_from = get_rgba("from")
     color_to = get_rgba("to")
 
+    from_hex = f"#{color_from[0]:02x}{color_from[1]:02x}{color_from[2]:02x}"
+    from_picker = document.querySelector("#from-rgb")
+    from_picker.value = from_hex
+
+    to_hex = f"#{color_to[0]:02x}{color_to[1]:02x}{color_to[2]:02x}"
+    to_picker = document.querySelector("#to-rgb")
+    to_picker.value = to_hex
+
+@when("input", ".color-controls input[type='color']")
+def on_color_picked(event):
+    global color_from, color_to, threshold
+
+    from_picker = document.querySelector("#from-rgb")
+    from_hex = from_picker.value.lstrip('#')
+    from_r = int(from_hex[0:2], 16)
+    from_g = int(from_hex[2:4], 16)
+    from_b = int(from_hex[4:6], 16)
+    color_from = (from_r, from_g, from_b, 255)
+    document.querySelector("#from-r").value = from_r
+    document.querySelector("#from-g").value = from_g
+    document.querySelector("#from-b").value = from_b
+    document.querySelector("#from-a").value = 255
+
+    to_picker = document.querySelector("#to-rgb")
+    to_hex = to_picker.value.lstrip('#')
+    to_r = int(to_hex[0:2], 16)
+    to_g = int(to_hex[2:4], 16)
+    to_b = int(to_hex[4:6], 16)
+    color_to = (to_r, to_g, to_b, 0)
+    document.querySelector("#to-r").value = to_r
+    document.querySelector("#to-g").value = to_g
+    document.querySelector("#to-b").value = to_b
+    document.querySelector("#to-a").value = 0
+
+
 @when("click", "#download-btn")
 def download_image(event):
     if processed_image_data:
@@ -79,16 +114,16 @@ def download_image(event):
 
 @when("click", "#change-btn")
 async def modify_image(event):
-    # TODO(genix): add spinner
-
-    print("1")
     global processed_image_data, color_to, color_from, threshold
 
     if processed_image_data is None:
         return
 
+    progress_element = document.querySelector("#progress")
+    progress_element.style.display = "block"
+    time.sleep(0.25)
+
     img_element = document.querySelector("#output-image")
-    print("2")
 
     # 2. Strip the header ("data:image/png;base64,")
     # We split by the comma and take the second part
@@ -115,8 +150,6 @@ async def modify_image(event):
         else:
             new_data.append(item)
 
-    print("3")
-
     # 1. Apply the data back to the image object
 
     img.putdata(new_data)
@@ -125,8 +158,6 @@ async def modify_image(event):
     buffered_output = io.BytesIO()
     img.save(buffered_output, format="PNG")
 
-    print("4")
-
     # 3. Get the raw bytes from that buffer
     final_img_bytes = buffered_output.getvalue()
 
@@ -134,9 +165,9 @@ async def modify_image(event):
     base64_encoded = base64.b64encode(final_img_bytes).decode('utf-8')
     processed_image_data = f"data:image/png;base64,{base64_encoded}"
 
-    print("5")
-
     # 5. Update the UI so the user sees the change
 
     img_element.src = processed_image_data
-    print("6")
+
+    progress_element.style.display = "none"
+    time.sleep(0.25)

@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" />
-      <title>Color remover</title>
-      <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css">
-      <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Color remover</title>
+        <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css">
+        <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
     </head>
+
+    <pre>
+A == 0      fully transparent
+A == 255    fully opaque
+    </pre>
 
     <div class="color-controls">
         <div>
@@ -15,6 +20,7 @@
             <input type="number" id="from-g" placeholder="G" min="0" max="255" value="0">
             <input type="number" id="from-b" placeholder="B" min="0" max="255" value="0">
             <input type="number" id="from-a" placeholder="A" min="0" max="255" value="0">
+            <input type="color" id="from-rgb" value="#000000">
         </div>
 
         <div style="margin-top: 10px;">
@@ -23,11 +29,12 @@
             <input type="number" id="to-g" placeholder="G" min="0" max="255" value="0">
             <input type="number" id="to-b" placeholder="B" min="0" max="255" value="0">
             <input type="number" id="to-a" placeholder="A" min="0" max="255" value="0">
+            <input type="color" id="to-rgb" value="#000000">
         </div>
 
         <div style="margin-top: 10px;">
             <p><strong>Color Threshold:</strong></p>
-            <input type="number" id="threshold" placeholder="threshold" min="0" max="255" value="0">
+            <input type="number" id="threshold" placeholder="threshold" min="0" max="255" value="10">
         </div>
     </div>
 
@@ -41,7 +48,7 @@
           <button id="change-btn" style="margin-top: 10px;">Change</button>
           <button id="download-btn" style="margin-top: 10px;">Download</button>
       </div>
-
+      <progress id="progress" style="display: none"></progress>
 
 
       <script type="py" src="./main.py" config="./pyscript.json"></script>
